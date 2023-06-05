@@ -1,0 +1,34 @@
+program             ::= ( functiondefinition )* <EOF>
+
+functiondefinition  ::= type <ID> "(" ")" "{" statementlist "}"
+functioncall        ::= <ID> "(" ")"
+
+statementlist       ::= ( block )*
+block               ::= "{" statementlist "}"
+                      | statement
+statement           ::= ifstatement
+                      | returnstatement ";"
+                      | printf ";"
+                      | statassignment ";"
+                      | functioncall ";"
+
+ifstatement         ::= <KW_IF> "(" assignment ")" block
+returnstatement     ::= <KW_RETURN> ( assignment )?
+
+printf              ::= <KW_PRINTF> "(" assignment ")"
+type                ::= <KW_BOOLEAN>
+                      | <KW_FLOAT>
+                      | <KW_INT>
+                      | <KW_VOID>
+
+statassignment      ::= <ID> "=" assignment
+assignment          ::= ( ( <ID> "=" assignment ) | expr )
+expr                ::= simpexpr ( ( "==" | "!=" | "<=" | ">=" | "<" | ">" ) simpexpr )?
+simpexpr            ::= ( "-" )? term ( ( "+" | "-" | "||" ) term )*
+term                ::= factor ( ( "*" | "/" | "&&" ) factor )*
+factor              ::= <CONST_INT>
+                      | <CONST_FLOAT>
+                      | <CONST_BOOLEAN>
+                      | functioncall
+                      | <ID>
+                      | "(" assignment ")"
